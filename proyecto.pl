@@ -4,12 +4,12 @@ categoria_color(neutral, [blanco,negro,gris,plateado,marron]).
 categoria_color(calido, [rojo,amarillo,naranja,dorado,rosa]).
 categoria_color(frio, [verde,azul,violeta]).
 
-publico_objetivo(1, 18, a).
-publico_objetivo(19, 24, b).
-publico_objetivo(25, 35, c).
-publico_objetivo(36, 50, d).
-publico_objetivo(51, 69, e).
-publico_objetivo(70, 200, f).
+publico_objetivo("1-18", a).
+publico_objetivo("19-24", b).
+publico_objetivo("25-35", c).
+publico_objetivo("36-50", d).
+publico_objetivo("51-69", e).
+publico_objetivo("70+", f).
 
 color_fav_publico(a, [rojo,rosa,azul,verde,naranja,violeta]).
 color_fav_publico(b, [rojo,rosa,azul,amarillo,dorado,verde,naranja,violeta,marron,blanco]).

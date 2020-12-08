@@ -1,33 +1,7 @@
 from tkinter import *
 from tkinter.ttk import *
-from pyswip import Prolog
 
-prolog = Prolog()
-prolog.consult("proyecto.pl")
-
-def convertList(lista):
-  return list(map(lambda var: str(var), lista))
-
-def cargarCategorias():
-  categorias = list(prolog.query("findall(Categoria, categoria_color(Categoria,_), Categorias)"))[0]["Categorias"]
-  return convertList(categorias)
-
-def cargarColoresArmonia():
-  colores = list(prolog.query("setof(Color, A^B^armonia(Color,A,B), Colores)"))[0]["Colores"]
-  return convertList(colores)
-
-def cargarColoresPositivos():
-  colores = list(prolog.query("findall(Color, sentimientos_positivos(_,Color), Colores)"))[0]["Colores"]
-  return convertList(colores)
-
-def cargarColoresNegativos():
-  colores = list(prolog.query("findall(Color, sentimientos_negativos(_,Color), Colores)"))[0]["Colores"]
-  return convertList(colores)
-
-def obtenerColoresPorCategoria(CATEGORIA):
-  colores = list(prolog.query("categoria_color("+CATEGORIA+",Colores)"))[0]["Colores"]
-  for color in colores:
-    print(color)
+from funciones import *
 
 if __name__ == "__main__":
 
