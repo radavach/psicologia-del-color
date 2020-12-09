@@ -16,28 +16,34 @@ def cargarCategorias():
   return convertList(categorias)
 
 ### Regresa una lista de los colores registrados con armonias disponibles ###
-### Ej: ['rojo','azul,'naranja'] ###
+### Ej: ['rojo','azul','naranja'] ###
 def cargarColoresArmonia():
   colores = list(prolog.query("setof(Color, A^B^armonia(Color,A,B), Colores)"))[0]["Colores"]
   return convertList(colores)
 
 ### Regresa una lista de los colores registrados con caracteristicas positivas ###
-### Ej: ['negro','marron,'plata'] ###
+### Ej: ['negro','marron','plata'] ###
 def cargarColoresPositivos():
   colores = list(prolog.query("findall(Color, sentimientos_positivos(_,Color), Colores)"))[0]["Colores"]
   return convertList(colores)
 
 ### Regresa una lista de los colores registrados con caracteristicas negativas ###
-### Ej: ['azul','rojo,'amarillo'] ###
+### Ej: ['azul','rojo','amarillo'] ###
 def cargarColoresNegativos():
   colores = list(prolog.query("findall(Color, sentimientos_negativos(_,Color), Colores)"))[0]["Colores"]
   return convertList(colores)
 
 ### Recibe una categoria y regresa una lista con los colores asociados a esta categoria ###
-### Ej: 'primario' => ['azul','rojo,'amarillo'] ###
+### Ej: 'primario' => ['azul','rojo','amarillo'] ###
 def obtenerColoresPorCategoria(CATEGORIA):
   colores = list(prolog.query("categoria_color("+CATEGORIA+",Colores)"))[0]["Colores"]
   return convertList(colores)
+
+### Regresa una lista de las edades registradas a las que les gusta un color ###
+### Ej: ['1-18','25-35','70+'] ###
+def cargarEdades():
+  edades = list(prolog.query("findall(Edad, publico_objetivo(Edad,_), Edades)"))[0]["Edades"]
+  return convertList(edades)
 
 #############################################################################################################
 #############################################################################################################
