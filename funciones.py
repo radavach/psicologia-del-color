@@ -94,3 +94,35 @@ def armoniaColor(COLOR):
     resultado[str(armonia[0])] = convertList(armonia[1])
 
   return resultado
+
+### Realiza la consulta en la base de conocimiento para cada elemento ###
+### los ordena por la cantidad de veces que se repiten regresa la lista ordenada ###
+def buscarCoincidencias(sentimientos=None, edad=None, categoria=None):
+
+  coloresCat = []
+  coloresEdad = []
+  coloresSent = []
+
+  if categoria != None and categoria != "" and isinstance(categoria, str):
+    coloresCat = convertList(list(prolog.query("categoria_color("+categoria+",Colores)"))[0]["Colores"])
+
+  if sentimientos != None and sentimientos != [] and isinstance(sentimientos, list):
+    for sentimiento in sentimientos:
+      if len(sentimiento) == 0:
+        continue
+      colores = list(prolog.query("""
+        findall(
+          Color, 
+          (sentimientos_positivos(Sentimientos,Color),member("""+sentimiento+""",Sentimientos);(sentimientos_negativos(Sentimientos,Color),member("""+sentimiento+""",Sentimientos))), 
+          Colores
+        )"""))[0]["Colores"]
+      # coloresSent.append(convertList(colores))
+      coloresSent = coloresSent + convertList(colores)
+
+  if edad != None and edad != "" and isinstance(edad, str):
+    coloresEdad = convertList(list(prolog.query("publico_objetivo(\""+edad+"\",Categoria),color_fav_publico(Categoria,Colores)"))[0]["Colores"])
+
+  colores = coloresCat + coloresEdad + coloresSent
+  sorted(set(colores), key = lambda ele: colores.count(ele)) 
+
+  return colores

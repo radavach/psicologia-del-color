@@ -1,3 +1,17 @@
+colores(amarillo).
+colores(azul).
+colores(blanco).
+colores(dorado).
+colores(gris).
+colores(marron).
+colores(naranja).
+colores(negro).
+colores(plateado).
+colores(rojo).
+colores(rosa).
+colores(verde).
+colores(violeta).
+
 categoria_color(primario, [rojo,azul,amarillo]).
 categoria_color(secundario, [verde,naranja,violeta]).
 categoria_color(neutral, [blanco,negro,gris,plateado,marron]).
