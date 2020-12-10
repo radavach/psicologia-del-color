@@ -128,6 +128,6 @@ def buscarCoincidencias(sentimientos=None, edad=None, categoria=None):
     coloresEdad = convertirEdades(list(prolog.query("""publico_objetivo(\""""+edad+"""\",Categoria),color_fav_publico(Categoria,Colores)"""))[0]["Colores"])
 
   colores = coloresCat + coloresEdad + coloresSent
-  colores = sorted(set(colores), key = lambda ele: colores.count(ele)) 
+  colores = sorted(set(colores), key = lambda ele: colores.count(ele), reverse=1) 
 
   return colores
