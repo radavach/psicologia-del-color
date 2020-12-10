@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.ttk import *
+from tkinter.scrolledtext import *
 
 import json
 import requests
@@ -9,11 +10,12 @@ from funciones import *
 class ColorWindow(Toplevel):
   def __init__(self, color, master=None):
     super().__init__(master=master)
+    
     window = self
 
     ## variables
     window.title("Psicología del color")
-    window.geometry("600x400")
+    window.geometry("680x480")
     
     armonies = armoniaColor(color)
     properties = caracteristicasColor(color)
@@ -21,82 +23,100 @@ class ColorWindow(Toplevel):
     negfeel = sentimientosNegativos(color)
 
     ## construir widgets
-    titulo = Label(window, text="COLOR")
-    titulo.grid(column=0, row=0)
+    titulo = Label(window, text="COLOR", font=("Helvetica", 30, "bold"), anchor="w")
+    titulo.grid(column=0, row=0, sticky=(N, W, E, S), padx=(50, 0), pady=(50, 5))
 
-    colorfrm = Frame(window, borderwidth=5, relief="ridge", width=140, height=140)
-    colorhx = Label(window, text="#"+armonies['analogo'][2])
-    colorfrm.grid(column=0, row=1, rowspan=4)
-    colorhx.grid(column=0, row=4)
+    s = Style()
+    s.configure('My.TFrame', background="#"+armonies['analogo'][2])
+    colorfrm = Frame(window, borderwidth=5, relief="ridge", width=140, height=140, style='My.TFrame')
+    self.hx = StringVar()
+    self.hx.set("#"+armonies['analogo'][2])
+    colorhx = Entry(window, textvariable=self.hx, justify="center", style='TLabel', state='readonly', font="Helvetica", width=10)
+    colorfrm.grid(column=0, row=1, rowspan=4, sticky=(N,W), padx=(50, 10))
+    colorhx.grid(column=0, row=4, sticky=(N, W, E, S), padx=(50, 10), pady=10)
 
-    colorlbl = Label(window, text=color.upper())
-    colorlbl.grid(column=1, row=0)
+    colorlbl = Label(window, text=color.upper(), font=("Helvetica", 20, "bold"), foreground="#"+armonies['analogo'][2], anchor="w")
+    colorlbl.grid(column=1, row=0, sticky=(W, S), pady=(50, 5))
 
-    caracteristicaslbl = Label(window, text="Características")
-    caracteristicastxt = Text(window, width=20, height=5)
+    caracteristicaslbl = Label(window, text="Características", font="Helvetica")
+    caracteristicastxt = ScrolledText(window, width=20, height=4, font=("Helvetica",11))
     caracteristicastxt.insert(INSERT, "Categorías:" + "\n" 
     + '\n'.join(map(str, properties['categorias'])).title() 
     + "\nRangos de edad: \n" + ', '.join(map(str, properties['edades'])))
-    caracteristicaslbl.grid(column=1, row=1)
-    caracteristicastxt.grid(column=1, row=2)
+    caracteristicastxt.configure(state="disabled")
+    caracteristicaslbl.grid(column=1, row=1, sticky=(N, W, E, S))
+    caracteristicastxt.grid(column=1, row=2, sticky=(N, W, E, S))
 
-    sigpositivos = Label(window, text="Significados evocados:")
-    sigpositivostxt = Text(window, width=20, height=5)
+    sigpositivos = Label(window, text="Significados evocados:", font="Helvetica")
+    sigpositivostxt = ScrolledText(window, width=20, height=4, font=("Helvetica",11))
     sigpositivostxt.insert(INSERT, '\n'.join(map(str, posfeel)).title())
-    sigpositivos.grid(column=1, row=3)
-    sigpositivostxt.grid(column=1, row=4)
+    sigpositivostxt.configure(state='disabled')
+    sigpositivos.grid(column=1, row=3, sticky=(N, W, E, S), pady=(10,0))
+    sigpositivostxt.grid(column=1, row=4, sticky=(N, W, E, S))
 
-    signegativos = Label(window, text="Significados negativos asociados:")
-    signegativostxt = Text(window, width=40, height=5)
+    signegativos = Label(window, text="Significados negativos asociados:", font="Helvetica")
+    signegativostxt = ScrolledText(window, width=40, height=4, font=("Helvetica",11))
     signegativostxt.insert(INSERT, '\n'.join(map(str, negfeel)).title())
-    signegativos.grid(column=0, row=5, columnspan=2)
-    signegativostxt.grid(column=0, row=6, columnspan=2)
+    signegativostxt.configure(state="disabled")
+    signegativos.grid(column=0, row=5, columnspan=2, sticky=(N, W, E, S), padx=(50, 10), pady=(10,0))
+    signegativostxt.grid(column=0, row=6, columnspan=2, sticky=(N, W, E, S), padx=(50, 0))
 
     # Menu con opciones de armonias
     ids = ['Análogo', 'Monocromático', 'Triada', 'Complementario', 'Separación Complementaria', 'Doble Separación Complementaria', 'Cuadro']
     vals = list(armonies.keys())
     options = dict(list(zip(ids, vals)))
-    armonialbl = Label(window, text="Armonía")
-    self.armoniacbx = Combobox(window, values=list(options.keys()))
+    armonialbl = Label(window, text="Armonía", font="Helvetica")
+    self.armoniacbx = Combobox(window, values=list(options.keys()), font=("Helvetica",11))
     self.armoniacbx.current(0)
-    armonialbl.grid(column=2, row=0, columnspan=2)
-    self.armoniacbx.grid(column=2, row=1, columnspan=2)
+    armonialbl.grid(column=2, row=0, columnspan=2, sticky=(W,S,E), pady=(50, 5), padx=(10,0))
+    self.armoniacbx.grid(column=2, row=1, columnspan=2, sticky=(W,E), padx=(10,0))
 
     #### colores armonia ####
-    color1 = Frame(window, borderwidth=5, relief="ridge", width=100, height=100)
+    s.configure('My1.TFrame', background="#"+armonies[options[self.armoniacbx.get()]][0])
+    self.color1 = Frame(window, borderwidth=5, relief="ridge", width=100, height=100, style="My1.TFrame")
     self.color1hex = StringVar()
     self.color1hex.set("#" + armonies[options[self.armoniacbx.get()]][0])
-    color1lbl = Label(window, textvariable=self.color1hex)
+    self.color1lbl = Entry(window, textvariable=self.color1hex, width=7, justify="center", style='TLabel', state='readonly', font="Helvetica")
     
-    color2 = Frame(window, borderwidth=5, relief="ridge", width=100, height=100)
+    s.configure('My2.TFrame', background="#"+armonies[options[self.armoniacbx.get()]][1])
+    self.color2 = Frame(window, borderwidth=5, relief="ridge", width=100, height=100, style="My2.TFrame")
     self.color2hex = StringVar()
     self.color2hex.set("#" + armonies[options[self.armoniacbx.get()]][1])
-    color2lbl = Label(window, textvariable=self.color2hex)
+    self.color2lbl = Entry(window, textvariable=self.color2hex, width=7, justify="center", style='TLabel', state='readonly', font="Helvetica")
 
-    color3 = Frame(window, borderwidth=5, relief="ridge", width=100, height=100)
+    s.configure('My3.TFrame', background="#"+armonies[options[self.armoniacbx.get()]][3])
+    self.color3 = Frame(window, borderwidth=5, relief="ridge", width=100, height=100, style="My3.TFrame")
     self.color3hex = StringVar()
     self.color3hex.set("#" + armonies[options[self.armoniacbx.get()]][3])
-    color3lbl = Label(window, textvariable=self.color3hex)
+    self.color3lbl = Entry(window, textvariable=self.color3hex, width=7, justify="center", style='TLabel', state='readonly', font="Helvetica")
 
-    color4 = Frame(window, borderwidth=5, relief="ridge", width=100, height=100)
+    s.configure('My4.TFrame', background="#"+armonies[options[self.armoniacbx.get()]][4])
+    self.color4 = Frame(window, borderwidth=5, relief="ridge", width=100, height=100, style="My4.TFrame")
     self.color4hex = StringVar()
     self.color4hex.set("#" + armonies[options[self.armoniacbx.get()]][4])
-    color4lbl = Label(window, textvariable=self.color4hex)
+    self.color4lbl = Entry(window, textvariable=self.color4hex, width=7, justify="center", style='TLabel', state='readonly', font="Helvetica")
     
-    color1.grid(column=2, row=2)
-    color1lbl.grid(column=2, row=2)
-    color2.grid(column=3, row=2)
-    color2lbl.grid(column=3, row=2)
-    color3.grid(column=3, row=4)
-    color3lbl.grid(column=3, row=4)
-    color4.grid(column=2, row=4)
-    color4lbl.grid(column=2, row=4)
+    self.color1.grid(column=2, row=2, rowspan=2, padx=(10,0), pady=(10,0))
+    self.color1lbl.grid(column=2, row=2, rowspan=2, sticky=(N,S,E,W), padx=(19,9), pady=(20,10))
+    self.color2.grid(column=3, row=2, rowspan=2, padx=(10,0), pady=(10,0))
+    self.color2lbl.grid(column=3, row=2, rowspan=2, sticky=(N,S,E,W), padx=(19,9), pady=(20,10))
+    self.color3.grid(column=3, row=4, rowspan=2, padx=(10,0), pady=(10,0))
+    self.color3lbl.grid(column=3, row=4, rowspan=2, sticky=(N,S,E,W), padx=(19,9), pady=(20,10))
+    self.color4.grid(column=2, row=4, rowspan=2, padx=(10,0), pady=(10,0))
+    self.color4lbl.grid(column=2, row=4, rowspan=2, sticky=(N,S,E,W), padx=(19,9), pady=(20,10))
 
     def armony_changed(armonies, options):
-      print(options[self.armoniacbx.get()])
+      s.configure('My1.TFrame', background="#"+armonies[options[self.armoniacbx.get()]][0])
+      self.color1['style'] = 'My1.TFrame'
       self.color1hex.set("#" + armonies[options[self.armoniacbx.get()]][0])
+      s.configure('My2.TFrame', background="#"+armonies[options[self.armoniacbx.get()]][1])
+      self.color2['style'] = 'My2.TFrame'
       self.color2hex.set("#" + armonies[options[self.armoniacbx.get()]][1])
+      s.configure('My3.TFrame', background="#"+armonies[options[self.armoniacbx.get()]][3])
+      self.color3['style'] = 'My3.TFrame'
       self.color3hex.set("#" + armonies[options[self.armoniacbx.get()]][3])
+      s.configure('My4.TFrame', background="#"+armonies[options[self.armoniacbx.get()]][4])
+      self.color4['style'] = 'My4.TFrame'
       self.color4hex.set("#" + armonies[options[self.armoniacbx.get()]][4])
 
     ## Se selecciona otra armonia
@@ -146,10 +166,12 @@ class selectColor(Toplevel):
           if(response.status_code == 200):
             sinonimos = response.json()["sinonimos"]
             for sinonimo in sinonimos:
-              listFeels.append(sinonimo["sinonimo"])
+              listFeels.append(sinonimo["sinonimo"].lower())
           else:
             print(response.status_code)
       
+    print(listFeels)
+    listFeels = list(set(map(lambda var: re.sub(" ","_",var.lower()),listFeels)))
     print(listFeels)
 
     self.title('Psicologia del color')
@@ -175,7 +197,7 @@ class selectColor(Toplevel):
 
 if __name__ == "__main__":
   recordH = [
-    {"feel": "felicidad", "age": "1-18", "category": ""},
+    {"feel": "felicidad,amor", "age": "1-18", "category": ""},
     {"feel": "", "age": "25-35", "category":"frio"},
     {"feel": "exitacion", "age": "1-18", "category": "frio"}]
 
