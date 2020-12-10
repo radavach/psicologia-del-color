@@ -22,15 +22,15 @@ publico_objetivo("1-18", a).
 publico_objetivo("19-24", b).
 publico_objetivo("25-35", c).
 publico_objetivo("36-50", d).
-publico_objetivo("51-69", e).
+publico_objetivo("50-69", e).
 publico_objetivo("70+", f).
 
-color_fav_publico(a, [rojo,rosa,azul,verde,naranja,violeta]).
-color_fav_publico(b, [rojo,rosa,azul,amarillo,dorado,verde,naranja,violeta,marron,blanco]).
-color_fav_publico(c, [rojo,rosa,azul,verde,naranja,violeta,marron,negro]).
-color_fav_publico(d, [azul,amarillo,dorado,verde,naranja,violeta,negro]).
-color_fav_publico(e, [rojo,rosa,azul,amarillo,dorado,naranja,violeta,gris,plateado,marron]).
-color_fav_publico(f, [azul,blanco]).
+color_fav_publico(a, [[rojo,4],[rosa,4],[azul,1],[verde,4],[naranja,4],[gris,4],[plateado,3]]).
+color_fav_publico(b, [[rojo,5],[rosa,5],[azul,4],[amarillo,1],[dorado,3],[verde,2],[naranja,1],[violeta,1],[gris,1],[plateado,3],[marron,2],[blanco,2],[negro,3]]).
+color_fav_publico(c, [[rojo,1],[rosa,1],[azul,2],[verde,3],[naranja,3],[violeta,2],[gris,2],[plateado,3],[marron,1],[blanco,1],[negro,1]]).
+color_fav_publico(d, [[rojo,2],[rosa,2],[azul,3],[amarillo,3],[dorado,3],[verde,1],[violeta,3],[negro,4]]).
+color_fav_publico(e, [[rojo,3],[rosa,3],[azul,5],[amarillo,2],[dorado,2],[naranja,2],[violeta,4],[gris,3],[plateado,3],[negro,2]]).
+color_fav_publico(f, [[azul,6],[blanco,3]]).
 
 sentimientos_positivos([confianza,serenidad,inteligencia,armonia,seguridad,serenidad,fidelidad,comunicacion,eficiencia,sinceridad,logica,reflexion,responsabilidad,calma,verdad], azul).
 sentimientos_positivos([masculinidad,calor,pasion,vitalidad,atrevimiento,importancia,fuerza,exitacion,exuberancia,osadia], rojo).

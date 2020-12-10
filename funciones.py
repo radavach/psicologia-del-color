@@ -9,6 +9,11 @@ prolog.consult("proyecto.pl")
 def convertList(lista):
   return list(map(lambda var: re.sub('b\'|\'', '', str(var)), lista))
 
+def convertirEdades(lista):  
+  lista = list(map(lambda tupla: (re.sub('b\'|\'','',str(tupla[0])), str(tupla[1])),lista))
+  lista = sorted(lista, key = lambda tupla: tupla[1], reverse=1)
+  return list(map(lambda tupla: tupla[0],lista))
+
 ### Regresa una lista de las categorias registradas para los colores ###
 ### Ej: ['primario','secundario','neutral']
 def cargarCategorias():
@@ -74,13 +79,13 @@ def caracteristicasColor(COLOR):
 
   edades = list(prolog.query("""
       findall(
-        Edad, 
-        (color_fav_publico(Categoria,Colores),member("""+COLOR+""",Colores),publico_objetivo(Edad,Categoria)),
+        [Edad,Peso],
+        (color_fav_publico(Categoria,Colores), once(member(["""+COLOR+""",Peso],Colores)),publico_objetivo(Edad,Categoria)),
         Edades
       )"""))[0]["Edades"]
 
   resultado["categorias"] = convertList(categorias)
-  resultado["edades"] = convertList(edades)
+  resultado["edades"] = convertirEdades(edades)
   
   return resultado
 
@@ -120,7 +125,7 @@ def buscarCoincidencias(sentimientos=None, edad=None, categoria=None):
       coloresSent = coloresSent + convertList(colores)
 
   if edad != None and edad != "" and isinstance(edad, str):
-    coloresEdad = convertList(list(prolog.query("publico_objetivo(\""+edad+"\",Categoria),color_fav_publico(Categoria,Colores)"))[0]["Colores"])
+    coloresEdad = convertirEdades(list(prolog.query("""publico_objetivo(\""""+edad+"""\",Categoria),color_fav_publico(Categoria,Colores)"""))[0]["Colores"])
 
   colores = coloresCat + coloresEdad + coloresSent
   colores = sorted(set(colores), key = lambda ele: colores.count(ele)) 
